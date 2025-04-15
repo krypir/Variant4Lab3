@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Конвертер валют</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; }
+        .converter { background: #f5f5f5; padding: 20px; border-radius: 8px; }
+        input, select { padding: 8px; margin: 5px; width: 120px; }
+        button { background: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; }
+        .result { margin-top: 20px; padding: 10px; background: #e8f5e9; border-radius: 4px; }
+        .error { color: #d32f2f; background: #ffebee; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="converter">
+        <h2>Конвертер валют</h2>
+
+        <form method="POST">
+            <input
+                type="number"
+                name="amount"
+                step="0.01"
+                placeholder="Сумма"
+                required
+                {% if request.method == 'POST' %}value="{{ request.form.amount }}"{% endif %}
+            >
+
+            <input
+                type="text"
+                name="from_curr"
+                placeholder="Из (напр. USD)"
+                maxlength="3"
+                required
+                {% if request.method == 'POST' %}value="{{ request.form.from_curr }}"{% endif %}
+            >
+
+            <input
+                type="text"
+                name="to_curr"
+                placeholder="В (напр. EUR)"
+                maxlength="3"
+                required
+                {% if request.method == 'POST' %}value="{{ request.form.to_curr }}"{% endif %}
+            >
+
+            <button type="submit">Конвертировать</button>
+        </form>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if result %}
+            <div class="result">
+                <h3>Результат:</h3>
+                <p>
+                    {{ result.amount }} {{ result.from_curr }} =
+                    <strong>{{ result.converted }}</strong> {{ result.to_curr }}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
